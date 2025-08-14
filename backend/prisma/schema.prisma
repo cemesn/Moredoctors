@@ -1,0 +1,284 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User accounts with roles
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role
+  mfaEnabled   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  patient      Patient?
+  doctor       Doctor?
+  payments     Payment[]
+}
+
+enum Role {
+  patient
+  doctor
+  admin
+}
+
+// Patient profile
+model Patient {
+  userId          String  @id
+  user            User    @relation(fields: [userId], references: [id])
+  birthDate       DateTime
+  sex             String
+  address         String
+  allergies       Json
+  conditions      Json
+  healthPlan      String?
+
+  appointments    Appointment[]
+  symptomChecks   SymptomCheck[]
+  emergencyReqs   EmergencyRequest[]
+  prescriptions   Prescription[]
+  pharmacyOrders  PharmacyOrder[]
+}
+
+// Doctor profile
+model Doctor {
+  userId             String  @id
+  user               User    @relation(fields: [userId], references: [id])
+  specialty          String
+  crm                String  @unique
+  bio                String?
+  practiceLocations  Json
+  telemedicine       Boolean @default(true)
+  scheduleConfig     Json
+
+  appointments       Appointment[]
+}
+
+model Appointment {
+  id           String      @id @default(cuid())
+  patientId    String
+  doctorId     String
+  kind         AppointmentType
+  dateTime     DateTime
+  status       AppointmentStatus @default(agendado)
+  notes        String?
+  createdAt    DateTime @default(now())
+
+  patient      Patient   @relation(fields: [patientId], references: [userId])
+  doctor       Doctor    @relation(fields: [doctorId], references: [userId])
+  labRequests  LabRequest[]
+  prescription Prescription?
+}
+
+enum AppointmentType {
+  presencial
+  tele
+}
+
+enum AppointmentStatus {
+  agendado
+  concluido
+  cancelado
+}
+
+model SymptomCheck {
+  id                   String   @id @default(cuid())
+  patientId            String
+  inputText            String
+  vitalsJson           Json?
+  aiOutputJson         Json
+  suggestedDestination Destination
+  suggestedSpecialty   String?
+  risk                 Float
+  confidence           Float
+  createdAt            DateTime @default(now())
+
+  patient              Patient  @relation(fields: [patientId], references: [userId])
+}
+
+enum Destination {
+  especialista
+  urgencia
+  exame
+  farmacia
+  tele
+  ER
+}
+
+model LabRequest {
+  id            String   @id @default(cuid())
+  appointmentId String?
+  type          String
+  status        String
+  partnerLab    String
+  dateTime      DateTime
+
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+  results       LabResult?
+}
+
+model LabResult {
+  id               String   @id @default(cuid())
+  labRequestId     String   @unique
+  resultsJson      Json
+  attachmentsUrl   String?
+  releasedToDoctor Boolean @default(false)
+
+  labRequest       LabRequest @relation(fields: [labRequestId], references: [id])
+}
+
+model PrescriptionItem {
+  id              String  @id @default(cuid())
+  prescriptionId  String
+  medication      String
+  dosage          String
+  quantity        Int
+  genericOk       Boolean @default(false)
+
+  prescription    Prescription @relation(fields: [prescriptionId], references: [id])
+}
+
+model Prescription {
+  id            String   @id @default(cuid())
+  appointmentId String   @unique
+  patientId     String
+  notes         String?
+  status        String
+  createdAt     DateTime @default(now())
+
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  patient       Patient    @relation(fields: [patientId], references: [userId])
+  items         PrescriptionItem[]
+  orders        PharmacyOrder[]
+}
+
+model PharmacyInventory {
+  sku                 String  @id
+  name                String
+  activeIngredient    String
+  presentation        String
+  basePrice           Float
+  stock               Int
+  reorderPoint        Int
+  supplier            String
+  leadTimeDays        Int
+}
+
+model PharmacyOrderItem {
+  id           String  @id @default(cuid())
+  orderId      String
+  sku          String
+  quantity     Int
+  unitPrice    Float
+
+  order        PharmacyOrder @relation(fields: [orderId], references: [id])
+}
+
+model PharmacyOrder {
+  id              String  @id @default(cuid())
+  prescriptionId  String?
+  patientId       String
+  total           Float
+  status          OrderStatus @default(pedido)
+  trackingCode    String?
+  createdAt       DateTime @default(now())
+
+  prescription    Prescription? @relation(fields: [prescriptionId], references: [id])
+  patient         Patient @relation(fields: [patientId], references: [userId])
+  items           PharmacyOrderItem[]
+}
+
+enum OrderStatus {
+  pedido
+  separacao
+  enviado
+  entregue
+  cancelado
+}
+
+model DemandForecast {
+  sku                String  @id
+  monthlyHistory     Json
+  nextMonthsForecast Json
+  lastUpdated        DateTime @default(now())
+}
+
+model EmergencyRequest {
+  id                String  @id @default(cuid())
+  patientId         String
+  lat               Float
+  lng               Float
+  level             EmergencyLevel
+  aiRecommendation  EmergencyRecommendation
+  status            EmergencyStatus @default(aberta)
+  suggestedHospital String?
+  createdAt         DateTime @default(now())
+
+  patient           Patient @relation(fields: [patientId], references: [userId])
+}
+
+enum EmergencyLevel {
+  alto
+  medio
+  baixo
+}
+
+enum EmergencyRecommendation {
+  ER
+  Urgencia
+  Tele
+}
+
+enum EmergencyStatus {
+  aberta
+  encaminhada
+  resolvida
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  userId    String
+  object    PaymentObject
+  amount    Float
+  currency  String
+  status    String
+  gateway   String
+  reference String?
+  createdAt DateTime @default(now())
+
+  user      User @relation(fields: [userId], references: [id])
+}
+
+enum PaymentObject {
+  assinatura
+  consulta
+  exame
+  farmacia
+}
+
+model Partner {
+  id          String   @id @default(cuid())
+  type        PartnerType
+  name        String
+  apiBaseUrl  String?
+  credentials String?
+  regions     Json
+}
+
+enum PartnerType {
+  lab
+  imagem
+  clinica
+  ambulancia
+}
