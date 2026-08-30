@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Housing | Los Angeles</title>
+  <meta name="description" content="Student housing options in Los Angeles for international students. Choose from Hollywood, Beverly Hills, and Malibu residence plans." />
+  <style>
+    :root {
+      --ink:#16211f;
+      --muted:#66706d;
+      --line:#e8ecea;
+      --paper:#fbfcfb;
+      --card:#ffffff;
+      --accent:#275f52;
+      --accent-soft:#eef5f2;
+      --dark:#10201b;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper);line-height:1.6}
+    a{text-decoration:none;color:inherit}
+    .wrap{width:min(1180px,calc(100% - 40px));margin:auto}
+    .nav{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.16);position:absolute;top:0;left:0;right:0;z-index:3;color:white}
+    .brand{font-weight:750;letter-spacing:.08em;font-size:14px}
+    .nav a.btn{padding:11px 18px;border:1px solid rgba(255,255,255,.55);border-radius:999px;font-size:14px}
+    .hero{min-height:720px;display:grid;place-items:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#0c1915 0%,#18382f 48%,#41685c 100%);color:white}
+    .hero:before{content:"";position:absolute;width:680px;height:680px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.12),rgba(255,255,255,0) 65%);top:-220px;right:-100px}
+    .hero:after{content:"";position:absolute;width:480px;height:480px;border:1px solid rgba(255,255,255,.13);border-radius:50%;left:-120px;bottom:-180px}
+    .hero-inner{position:relative;z-index:2;text-align:center;max-width:900px;padding-top:76px}
+    .eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:700;opacity:.82;margin-bottom:18px}
+    h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:clamp(52px,8vw,92px);line-height:.98;margin:0 0 26px;letter-spacing:-.03em}
+    .hero p{max-width:690px;margin:0 auto 34px;color:rgba(255,255,255,.82);font-size:19px}
+    .cta{display:inline-flex;align-items:center;justify-content:center;padding:15px 24px;border-radius:999px;background:white;color:var(--dark);font-weight:700;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+    section{padding:92px 0}
+    .intro{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start}
+    .kicker{color:var(--accent);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;margin-bottom:12px}
+    h2{font-family:Georgia,"Times New Roman",serif;font-size:clamp(38px,5vw,58px);line-height:1.08;font-weight:500;letter-spacing:-.025em;margin:0}
+    .intro p{font-size:18px;color:var(--muted);margin:0}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:52px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 10px 34px rgba(17,36,30,.045);transition:.25s transform,.25s box-shadow}
+    .card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(17,36,30,.08)}
+    .card-top{height:168px;padding:26px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(145deg,#f2f5f3,#e5eeea)}
+    .card:nth-child(2) .card-top{background:linear-gradient(145deg,#f5f0e8,#eee3d5)}
+    .card:nth-child(3) .card-top{background:linear-gradient(145deg,#edf3f5,#dfecef)}
+    .tag{font-size:12px;text-transform:uppercase;letter-spacing:.14em;font-weight:800;color:#41504b}
+    .card-name{font-family:Georgia,"Times New Roman",serif;font-size:34px;line-height:1}
+    .card-body{padding:28px}
+    .price{font-size:34px;font-weight:800;letter-spacing:-.03em;margin-bottom:4px}
+    .price span{font-size:14px;font-weight:600;color:var(--muted);letter-spacing:0}
+    .desc{color:var(--muted);font-size:15px;margin:14px 0 22px}
+    ul{list-style:none;padding:0;margin:0}
+    li{padding:10px 0;border-top:1px solid var(--line);font-size:14px;display:flex;justify-content:space-between;gap:20px}
+    li strong{font-weight:700}
+    .best{margin-top:22px;padding:14px 16px;border-radius:12px;background:var(--accent-soft);font-size:13px;color:#3f6259}
+    .compare{background:#f2f6f4}
+    .compare-head{text-align:center;max-width:720px;margin:0 auto 44px}
+    table{width:100%;border-collapse:collapse;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(17,36,30,.045)}
+    th,td{padding:18px 20px;border-bottom:1px solid var(--line);text-align:center;font-size:14px}
+    th:first-child,td:first-child{text-align:left}
+    th{background:#fafcfb;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#53605c}
+    tr:last-child td{border-bottom:none}
+    .experience{display:grid;grid-template-columns:.9fr 1.1fr;gap:78px;align-items:center}
+    .quote-card{background:var(--dark);color:white;border-radius:26px;padding:46px;min-height:360px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden}
+    .quote-card:before{content:"LA";position:absolute;right:24px;top:-26px;font-family:Georgia,serif;font-size:160px;color:rgba(255,255,255,.045)}
+    .quote-card p{font-family:Georgia,serif;font-size:30px;line-height:1.25;margin:0 0 18px;position:relative}
+    .quote-card small{color:rgba(255,255,255,.62);text-transform:uppercase;letter-spacing:.12em}
+    .experience-copy p{color:var(--muted);font-size:18px;margin:22px 0 0}
+    .notice{margin-top:32px;border-left:3px solid var(--accent);padding-left:18px;color:var(--muted);font-size:13px}
+    .final{background:var(--dark);color:white;text-align:center;padding:90px 0}
+    .final h2{max-width:760px;margin:0 auto 18px}
+    .final p{color:rgba(255,255,255,.7);max-width:620px;margin:0 auto 30px}
+    footer{background:#0b1512;color:rgba(255,255,255,.5);padding:28px 0;font-size:12px;text-align:center}
+    @media(max-width:860px){.intro,.experience{grid-template-columns:1fr;gap:30px}.cards{grid-template-columns:1fr}.hero{min-height:650px}.nav{height:68px}.nav .btn{display:none}section{padding:68px 0}.table-wrap{overflow-x:auto}table{min-width:680px}}
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="nav wrap">
+      <div class="brand">STUDENT HOUSING · LOS ANGELES</div>
+      <a class="btn" href="#residences">Explore Residences</a>
+    </div>
+    <div class="hero-inner wrap">
+      <div class="eyebrow">International Student Living</div>
+      <h1>Find Your Home<br>in Los Angeles</h1>
+      <p>Comfortable, community-oriented housing designed to help international students live, connect, and experience Southern California while pursuing their education.</p>
+      <a class="cta" href="#residences">View Housing Options</a>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="wrap intro">
+        <div>
+          <div class="kicker">Student Life</div>
+          <h2>More than a place to stay.</h2>
+        </div>
+        <p>Living in Los Angeles is an important part of the international student experience. Our shared residences are designed to create a welcoming environment where students can build friendships, practice English, experience different cultures, and develop independence while studying in the United States.</p>
+      </div>
+    </section>
+
+    <section id="residences" style="padding-top:10px">
+      <div class="wrap">
+        <div class="kicker">Choose Your Residence</div>
+        <h2>Three options.<br>One Los Angeles experience.</h2>
+        <div class="cards">
+          <article class="card">
+            <div class="card-top"><div class="tag">Double Room</div><div class="card-name">Hollywood</div></div>
+            <div class="card-body">
+              <div class="price">$2,000 <span>/ month · per student</span></div>
+              <p class="desc">A more spacious shared-room experience for students who value additional personal space while remaining part of a student community.</p>
+              <ul>
+                <li><span>Bedroom</span><strong>2 students</strong></li>
+                <li><span>Apartment</span><strong>Shared</strong></li>
+                <li><span>Bathroom</span><strong>Shared</strong></li>
+                <li><span>Kitchen</span><strong>Shared</strong></li>
+                <li><span>Furnished</span><strong>Yes</strong></li>
+              </ul>
+              <div class="best">Best for students who prefer fewer roommates and more personal space.</div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top"><div class="tag">Triple Room</div><div class="card-name">Beverly Hills</div></div>
+            <div class="card-body">
+              <div class="price">$1,500 <span>/ month · per student</span></div>
+              <p class="desc">A balanced option combining comfort, community, and affordability for international students beginning their Los Angeles experience.</p>
+              <ul>
+                <li><span>Bedroom</span><strong>3 students</strong></li>
+                <li><span>Apartment</span><strong>Shared</strong></li>
+                <li><span>Bathroom</span><strong>Shared</strong></li>
+                <li><span>Kitchen</span><strong>Shared</strong></li>
+                <li><span>Furnished</span><strong>Yes</strong></li>
+              </ul>
+              <div class="best">Best for students seeking a balance between comfort, social life, and value.</div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top"><div class="tag">Quadruple Room</div><div class="card-name">Malibu</div></div>
+            <div class="card-body">
+              <div class="price">$1,000 <span>/ month · per student</span></div>
+              <p class="desc">Our most accessible housing option, designed for students who enjoy a highly social, community-oriented living environment.</p>
+              <ul>
+                <li><span>Bedroom</span><strong>4 students</strong></li>
+                <li><span>Apartment</span><strong>Shared</strong></li>
+                <li><span>Bathroom</span><strong>Shared</strong></li>
+                <li><span>Kitchen</span><strong>Shared</strong></li>
+                <li><span>Furnished</span><strong>Yes</strong></li>
+              </ul>
+              <div class="best">Best for students who prioritize affordability and community living.</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="compare">
+      <div class="wrap">
+        <div class="compare-head"><div class="kicker">Compare</div><h2>Find the right fit.</h2></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Housing Feature</th><th>Hollywood</th><th>Beverly Hills</th><th>Malibu</th></tr></thead>
+            <tbody>
+              <tr><td>Room Type</td><td>Double</td><td>Triple</td><td>Quadruple</td></tr>
+              <tr><td>Students per Bedroom</td><td>2</td><td>3</td><td>4</td></tr>
+              <tr><td>Shared Apartment</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+              <tr><td>Shared Bathroom</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+              <tr><td>Shared Kitchen</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+              <tr><td>Monthly Price / Student</td><td><strong>$2,000</strong></td><td><strong>$1,500</strong></td><td><strong>$1,000</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap experience">
+        <div class="quote-card"><p>Study. Live. Connect. Experience Los Angeles.</p><small>International Student Housing</small></div>
+        <div class="experience-copy">
+          <div class="kicker">The Los Angeles Experience</div>
+          <h2>Your city becomes part of your education.</h2>
+          <p>Living with students from different countries gives you the opportunity to build international friendships, improve your English, experience American culture, and become part of a diverse student community.</p>
+          <p>From studying together to exploring Southern California, your housing experience can become one of the most memorable parts of your journey in the United States.</p>
+          <div class="notice">Hollywood, Beverly Hills, and Malibu are housing plan names. Residence locations may vary and should be confirmed before booking. Housing availability, terms, and placement are subject to the applicable housing agreement.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="final">
+      <div class="wrap">
+        <div class="eyebrow">Your Los Angeles Journey Starts Here</div>
+        <h2>Choose the housing experience that fits your lifestyle and budget.</h2>
+        <p>Comfortable shared living, an international student community, and a home base for your studies in Southern California.</p>
+        <a class="cta" href="#residences">Explore Residences</a>
+      </div>
+    </section>
+  </main>
+  <footer><div class="wrap">Student Housing · Los Angeles · Housing options and availability subject to terms and confirmation.</div></footer>
+</body>
+</html>
